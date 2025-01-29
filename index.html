@@ -1,0 +1,63 @@
+import React, { useState, useEffect } from "react";
+
+const timetable = {
+  Monday: [
+    { time: "8:30am - 9:25am", subject: "MA110", venue: "LA201" },
+    { time: "9:30am - 10:25am", subject: "ES204", venue: "LT205" },
+    { time: "10:30am - 11:30am", subject: "MS101", venue: "LA202" },
+    { time: "2:00pm - 5:00pm", subject: "MS ME Lab", venue: "Lab" },
+  ],
+  Tuesday: [
+    { time: "8:30am - 9:30am", subject: "ES204", venue: "LT306" },
+    { time: "9:30am - 10:30am", subject: "MA110", venue: "LA201" },
+  ],
+  Wednesday: [
+    { time: "8:30am - 9:30am", subject: "MS101", venue: "LA202" },
+    { time: "11:00am - 12:30pm", subject: "CS101", venue: "LA201" },
+    { time: "3:00pm - 4:00pm", subject: "Maths Tutorial", venue: "LT002" },
+  ],
+  Thursday: [
+    { time: "9:30am - 10:30am", subject: "ES101", venue: "LT306" },
+    { time: "10:30am - 11:30am", subject: "MA110", venue: "LA201" },
+    { time: "2:00pm - 5:00pm", subject: "MS101 Lab", venue: "Energy Building" },
+    { time: "8:45pm - 11:00pm", subject: "CS101 Lab", venue: "CC Building" },
+  ],
+  Friday: [
+    { time: "11:30am - 12:30pm", subject: "CS101", venue: "LA201" },
+    { time: "2:00pm - 5:00pm", subject: "PH110 Lab", venue: "Transit Building" },
+  ],
+};
+
+const days = Object.keys(timetable);
+
+export default function Timetable() {
+  const todayIndex = new Date().getDay() - 1;
+  const [currentDayIndex, setCurrentDayIndex] = useState(todayIndex >= 0 && todayIndex < days.length ? todayIndex : 0);
+
+  const nextDay = () => {
+    setCurrentDayIndex((prev) => (prev + 1) % days.length);
+  };
+  
+  const prevDay = () => {
+    setCurrentDayIndex((prev) => (prev - 1 + days.length) % days.length);
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
+      <h1 className="text-3xl font-bold mb-4">{days[currentDayIndex]}'s Timetable</h1>
+      <div className="w-full max-w-md bg-gray-800 p-6 rounded-lg shadow-lg">
+        {timetable[days[currentDayIndex]].map((entry, index) => (
+          <div key={index} className="border-b border-gray-700 py-3">
+            <h2 className="text-lg font-semibold">{entry.subject}</h2>
+            <p className="text-sm text-gray-400">{entry.time}</p>
+            <p className="text-sm text-gray-400">{entry.venue}</p>
+          </div>
+        ))}
+      </div>
+      <div className="flex gap-4 mt-4">
+        <button onClick={prevDay} className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg">&lt; Prev</button>
+        <button onClick={nextDay} className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg">Next &gt;</button>
+      </div>
+    </div>
+  );
+}
